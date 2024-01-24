@@ -1,0 +1,8 @@
+total 112
+-rw-------@  1 ehammoud  2023_abu-dhabi    372 Jan 11 16:42 Makefile
+drwx------@  5 ehammoud  2023_abu-dhabi    170 Jan 11 16:32 headers
+-rw-r--r--   1 ehammoud  2023_abu-dhabi      0 Jan 11 19:26 inf
+----------   1 ehammoud  2023_abu-dhabi      0 Jan 11 19:26 nop
+-rw-r--r--   1 ehammoud  2023_abu-dhabi      0 Jan 11 19:26 out
+-rwxr-xr-x   1 ehammoud  2023_abu-dhabi  50520 Jan 11 19:25 pipex
+drwx------@ 11 ehammoud  2023_abu-dhabi    374 Jan 11 19:25 srcs
