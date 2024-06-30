@@ -6,11 +6,18 @@
 /*   By: ehammoud <ehammoud@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/06/12 19:08:05 by ehammoud          #+#    #+#             */
-/*   Updated: 2024/06/28 18:17:34 by ehammoud         ###   ########.fr       */
+/*   Updated: 2024/06/30 04:09:54 by ehammoud         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include <philos.h>
+
+void	*one_philo(t_pass *s, t_philo *p)
+{
+	print_act(s, p->id, FORKING, 0);
+	ft_sleep(s, p->id, s->info[DT] * 2, p->le);
+	return (NULL);
+}
 
 void	*routine(void *data)
 {
@@ -25,13 +32,13 @@ void	*routine(void *data)
 	pthread_mutex_unlock(&(s->m_tid));
 	p.le = militime();
 	p.ec = 0;
-	while (p.ec < s->info[TTE] || s->info[TTE] == -1)
+	if (s->info[NP] == 1)
+		return (one_philo(s, &p));
+	while ((p.ec < s->info[TTE] || s->info[TTE] == -1) && !dead_philo(s))
 	{
-		if (dead_philo(s))
-			return (NULL);
 		if (p.ec)
-			print_act(s, p.id, THINKING);
-		if (!wait_for_fork(s, p.id) || !wait_for_fork(s, p.id))
+			print_act(s, p.id, THINKING, 3);
+		if (!wait_for_fork(s, &p) || !wait_for_fork(s, &p))
 			return (NULL);
 		if (!eating(s, &p))
 			return (NULL);
@@ -65,21 +72,24 @@ void	handle_philos(int *info)
 	t_pass		shared;
 	pthread_t	*philos;
 	int			ret;
+	int			i;
 
 	if (!ft_malloc((void **)&philos, info[NP], sizeof(pthread_t)))
 		free_and_exit(NULL, NULL, ERR_MEM, 1);
 	shared.info = info;
-	init_shared_info(&shared);
+	if (!init_shared_info(&shared))
+		free_and_exit(&shared, philos, ERR_MEM, EXIT_FAILURE);
 	ret = run_threads(philos, &shared, routine);
-	if (ret)
-		free_and_exit(&shared, philos, ret, 1);
-	else if (shared.dead_philo)
-		free_and_exit(&shared, philos, FAILURE, 0);
-	/*	 	Dont forget to destroy mutexes 		*/
-	pthread_mutex_destroy(&shared.m_death);
-	pthread_mutex_destroy(shared.m_forks);
+	i = 0;
+	while (i++ < info[NP])
+		pthread_mutex_destroy(&shared.m_forks[i]);
 	pthread_mutex_destroy(&shared.m_tid);
+	pthread_mutex_destroy(&shared.m_fed);
+	pthread_mutex_destroy(&shared.m_death);
 	pthread_mutex_destroy(&shared.m_write);
-	/*		 Dont forget to destroy mutexes 	*/
-	free_and_exit(&shared, philos, SUCCESS, 0);
+	if (ret)
+		free_and_exit(&shared, philos, ret, EXIT_FAILURE);
+	else if (shared.dead_philo)
+		free_and_exit(&shared, philos, FAILURE, EXIT_SUCCESS);
+	free_and_exit(&shared, philos, SUCCESS, EXIT_SUCCESS);
 }

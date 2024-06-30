@@ -6,7 +6,7 @@
 /*   By: ehammoud <ehammoud@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/12/17 10:48:23 by codespace         #+#    #+#             */
-/*   Updated: 2024/06/23 16:46:55 by ehammoud         ###   ########.fr       */
+/*   Updated: 2024/06/30 04:19:15 by ehammoud         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -28,6 +28,7 @@
 # define ST 3
 # define TTE 4
 
+# define AVAILABLE -1
 # define NONE 0
 # define LEFT 1
 # define RIGHT 2
@@ -40,9 +41,9 @@
 # define ERR_PTJ 4
 # define ERR_GEN 5
 
-# define EATING "is eating"
-# define THINKING "is thinking"
-# define SLEEPING "is sleeping"
+# define EATING " is eating"
+# define THINKING " is thinking"
+# define SLEEPING " is sleeping"
 # define FORKING "has picked up a fork"
 # define DYING "has died"
 
@@ -54,6 +55,7 @@ typedef struct s_passed_info
 	int				*info;
 	int				*forks;
 	t_bool			dead_philo;
+	pthread_mutex_t	m_fed;
 	pthread_mutex_t	m_tid;
 	pthread_mutex_t	m_write;
 	pthread_mutex_t	m_death;
@@ -69,12 +71,12 @@ typedef struct s_philo_info
 
 t_bool	init_shared_info(t_pass *shared);
 t_bool	ft_sleep(t_pass *s, int pid, unsigned long ms, unsigned long last);
-void	print_act(t_pass *s, int philo_id, char *act);
+void	print_act(t_pass *s, int philo_id, char *act, int font);
 void	free_and_exit(t_pass *shared, pthread_t *philos, int msg, int status);
 t_bool	dead_philo(t_pass *s);
 t_bool	kill_philo(t_pass *s, int pid);
-int		fork_available(t_pass *s, int fork_cnt, int pid);
-t_bool	wait_for_fork(t_pass *s, int pid);
+int		fork_available(t_pass *s, int pid);
+t_bool	wait_for_fork(t_pass *s, t_philo *p);
 t_bool	sleeping(t_pass *s, t_philo *p);
 t_bool	eating(t_pass *s, t_philo *p);
 void	*routine(void *data);

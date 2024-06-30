@@ -6,7 +6,7 @@
 /*   By: ehammoud <ehammoud@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/06/12 19:18:54 by ehammoud          #+#    #+#             */
-/*   Updated: 2024/06/28 20:41:35 by ehammoud         ###   ########.fr       */
+/*   Updated: 2024/06/30 04:18:25 by ehammoud         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -15,17 +15,17 @@
 void	free_and_exit(t_pass *shared, pthread_t *philos, int msg, int status)
 {
 	if (msg == SUCCESS)
-		write(2, GREEN_BOLD"Success!\nSimulation over!\n"RESET, 37);
+		write(2, GREEN_BOLD"\nSuccess!\nSimulation over!\n"RESET, 38);
 	if (msg == ERR_MEM)
-		write(2, RED_BOLD"Error\nMemory allocation failed!\n"RESET, 43);
+		write(2, RED_BOLD"\nError\nMemory allocation failed!\n"RESET, 44);
 	if (msg == ERR_PTC)
-		write(2, RED_BOLD"Error\nPThread creation failed!\n"RESET, 42);
+		write(2, RED_BOLD"\nError\nPThread creation failed!\n"RESET, 43);
 	if (msg == ERR_PTJ)
-		write(2, RED_BOLD"Error\nPThread joining failed!\n"RESET, 41);
+		write(2, RED_BOLD"\nError\nPThread joining failed!\n"RESET, 42);
 	if (msg == ERR_GEN)
-		write(2, RED_BOLD"Error\nUnexpected error occurred!\n"RESET, 44);
+		write(2, RED_BOLD"\nError\nUnexpected error occurred!\n"RESET, 45);
 	if (msg == FAILURE)
-		write(2, PURPLE_BOLD"Failure!\nA philosopher has died!\n"RESET, 44);
+		write(2, PURPLE_BOLD"\nFailure!\nA philosopher has died!\n"RESET, 45);
 	if (shared->forks)
 		free(shared->forks);
 	if (shared->m_forks)
@@ -51,23 +51,34 @@ t_bool	init_shared_info(t_pass *shared)
 	i = 0;
 	while (i < shared->info[NP])
 	{
-		if (pthread_mutex_init(shared->m_forks + i, NULL) != 0)
-			return (False);
-		shared->forks[i++] = 0;
+		pthread_mutex_init(shared->m_forks + i, NULL);
+		shared->forks[i++] = -1;
 	}
-	if (pthread_mutex_init(&(shared->m_tid), NULL) != 0)
-		return (False);
-	if (pthread_mutex_init(&(shared->m_write), NULL) != 0)
-		return (False);
-	if (pthread_mutex_init(&(shared->m_death), NULL) != 0)
-		return (False);
+	pthread_mutex_init(&(shared->m_tid), NULL);
+	pthread_mutex_init(&(shared->m_fed), NULL);
+	pthread_mutex_init(&(shared->m_write), NULL);
+	pthread_mutex_init(&(shared->m_death), NULL);
 	return (True);
 }
 
-void	print_act(t_pass *s, int philo_id, char *act)
+void	print_act(t_pass *s, int philo_id, char *act, int font)
 {
 	pthread_mutex_lock(&(s->m_write));
-	printf("%lu %d %s\n", militime() - s->start, philo_id + 1, act);
+	if (!dead_philo(s))
+	{
+		if (font == 3)
+			printf(YELLOW"%-5lu %-3d %s\n"RESET, militime() - s->start, \
+			philo_id + 1, act);
+		if (font == 1)
+			printf(GREEN"%-5lu %-3d %s\n"RESET, militime() - s->start, \
+			philo_id + 1, act);
+		if (font == 2)
+			printf(BLUE"%-5lu %-3d %s\n"RESET, militime() - s->start, \
+			philo_id + 1, act);
+		if (font == 0)
+			printf(CYAN"%-5lu %-3d %s\n"RESET, militime() - s->start, \
+			philo_id + 1, act);
+	}
 	pthread_mutex_unlock(&(s->m_write));
 }
 
@@ -92,7 +103,7 @@ t_bool	ft_sleep(t_pass *s, int pid, unsigned long ms, unsigned long last)
 			return (kill_philo(s, pid));
 		if (dead_philo(s))
 			return (False);
-		usleep(250);
+		usleep(50);
 	}
 	return (True);
 }
