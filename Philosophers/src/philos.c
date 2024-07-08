@@ -6,7 +6,7 @@
 /*   By: ehammoud <ehammoud@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/06/12 19:08:05 by ehammoud          #+#    #+#             */
-/*   Updated: 2024/06/30 04:09:54 by ehammoud         ###   ########.fr       */
+/*   Updated: 2024/06/30 14:26:19 by ehammoud         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -15,8 +15,21 @@
 void	*one_philo(t_pass *s, t_philo *p)
 {
 	print_act(s, p->id, FORKING, 0);
-	ft_sleep(s, p->id, s->info[DT] * 2, p->le);
+	ft_sleep(s, p, p->dt * 2, p->le);
 	return (NULL);
+}
+
+void	init_philo(t_pass *s, t_philo *p)
+{
+	p->le = militime();
+	p->ec = 0;
+	pthread_mutex_lock(&(s->m_info));
+	p->np = s->info[NP];
+	p->dt = s->info[DT];
+	p->st = s->info[ST];
+	p->et = s->info[ET];
+	p->tte = s->info[TTE];
+	pthread_mutex_unlock(&(s->m_info));
 }
 
 void	*routine(void *data)
@@ -30,19 +43,16 @@ void	*routine(void *data)
 	if (!s->start)
 		s->start = militime();
 	pthread_mutex_unlock(&(s->m_tid));
-	p.le = militime();
-	p.ec = 0;
-	if (s->info[NP] == 1)
+	init_philo(s, &p);
+	if (p.np == 1)
 		return (one_philo(s, &p));
-	while ((p.ec < s->info[TTE] || s->info[TTE] == -1) && !dead_philo(s))
+	while ((p.ec < p.tte || p.tte == -1) && !dead_philo(s))
 	{
 		if (p.ec)
 			print_act(s, p.id, THINKING, 3);
 		if (!wait_for_fork(s, &p) || !wait_for_fork(s, &p))
 			return (NULL);
-		if (!eating(s, &p))
-			return (NULL);
-		if (!sleeping(s, &p))
+		if (!eating(s, &p) || !sleeping(s, &p))
 			return (NULL);
 	}
 	return (NULL);
@@ -83,6 +93,7 @@ void	handle_philos(int *info)
 	i = 0;
 	while (i++ < info[NP])
 		pthread_mutex_destroy(&shared.m_forks[i]);
+	pthread_mutex_destroy(&shared.m_info);
 	pthread_mutex_destroy(&shared.m_tid);
 	pthread_mutex_destroy(&shared.m_fed);
 	pthread_mutex_destroy(&shared.m_death);

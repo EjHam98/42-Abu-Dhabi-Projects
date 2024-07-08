@@ -6,7 +6,7 @@
 /*   By: ehammoud <ehammoud@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/12/17 10:48:23 by codespace         #+#    #+#             */
-/*   Updated: 2024/06/30 04:19:15 by ehammoud         ###   ########.fr       */
+/*   Updated: 2024/07/07 14:30:59 by ehammoud         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -27,12 +27,6 @@
 # define ET 2
 # define ST 3
 # define TTE 4
-
-# define AVAILABLE -1
-# define NONE 0
-# define LEFT 1
-# define RIGHT 2
-# define BOTH 3
 
 # define SUCCESS 0
 # define FAILURE 1
@@ -55,6 +49,7 @@ typedef struct s_passed_info
 	int				*info;
 	int				*forks;
 	t_bool			dead_philo;
+	pthread_mutex_t	m_info;
 	pthread_mutex_t	m_fed;
 	pthread_mutex_t	m_tid;
 	pthread_mutex_t	m_write;
@@ -64,18 +59,23 @@ typedef struct s_passed_info
 
 typedef struct s_philo_info
 {
+	int				tte;
 	int				id;
 	int				ec;
+	int				np;
+	int				dt;
+	int				et;
+	int				st;
 	unsigned long	le;
 }	t_philo;
 
 t_bool	init_shared_info(t_pass *shared);
-t_bool	ft_sleep(t_pass *s, int pid, unsigned long ms, unsigned long last);
+t_bool	ft_sleep(t_pass *s, t_philo *p, unsigned long ms, unsigned long last);
 void	print_act(t_pass *s, int philo_id, char *act, int font);
 void	free_and_exit(t_pass *shared, pthread_t *philos, int msg, int status);
 t_bool	dead_philo(t_pass *s);
 t_bool	kill_philo(t_pass *s, int pid);
-int		fork_available(t_pass *s, int pid);
+int		fork_available(t_pass *s, t_philo *p);
 t_bool	wait_for_fork(t_pass *s, t_philo *p);
 t_bool	sleeping(t_pass *s, t_philo *p);
 t_bool	eating(t_pass *s, t_philo *p);

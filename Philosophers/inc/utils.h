@@ -6,12 +6,18 @@
 /*   By: ehammoud <ehammoud@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/06/12 14:48:43 by ehammoud          #+#    #+#             */
-/*   Updated: 2024/06/30 02:38:00 by ehammoud         ###   ########.fr       */
+/*   Updated: 2024/07/07 15:34:21 by ehammoud         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #ifndef UTILS_H
 # define UTILS_H
+
+# define AVAILABLE -1
+# define NONE 0
+# define LEFT 1
+# define RIGHT 2
+# define BOTH 3
 
 # include <stdlib.h>
 # include <limits.h>
@@ -19,8 +25,8 @@
 # include <unistd.h>
 
 unsigned long	militime(void);
-int				ft_atoi(char *str);
-void			*ft_malloc(void **p, int elems, int size);
-int				left_index(int pid, int n);
+int		ft_atoi(char *str);
+void	*ft_malloc(void **p, int elems, int size);
+int		get_fork(int pid, int n, int fork);
 
 #endif

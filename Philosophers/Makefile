@@ -37,7 +37,8 @@ TEXT_RESET        = \033[0m    # Text Reset
 
 CC = cc
 CFLAGS = -Wall -Wextra -Werror -pthread -I./inc/
-CFLAGS += -fsanitize=address,undefined -g3
+# CFLAGS += -fsanitize=address,undefined -g3
+CFLAGS += -fsanitize=thread
 NAME = philos
 SRCS = ./src/main.c ./src/philos.c ./src/philo_acts.c ./src/philo_utils.c ./src/utils.c
 OBJS = $(SRCS:.c=.o)

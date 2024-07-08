@@ -6,7 +6,7 @@
 /*   By: ehammoud <ehammoud@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/06/12 19:18:54 by ehammoud          #+#    #+#             */
-/*   Updated: 2024/06/30 04:18:25 by ehammoud         ###   ########.fr       */
+/*   Updated: 2024/06/30 14:25:29 by ehammoud         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -54,6 +54,7 @@ t_bool	init_shared_info(t_pass *shared)
 		pthread_mutex_init(shared->m_forks + i, NULL);
 		shared->forks[i++] = -1;
 	}
+	pthread_mutex_init(&(shared->m_info), NULL);
 	pthread_mutex_init(&(shared->m_tid), NULL);
 	pthread_mutex_init(&(shared->m_fed), NULL);
 	pthread_mutex_init(&(shared->m_write), NULL);
@@ -92,15 +93,15 @@ t_bool	dead_philo(t_pass *s)
 	return (ret);
 }
 
-t_bool	ft_sleep(t_pass *s, int pid, unsigned long ms, unsigned long last)
+t_bool	ft_sleep(t_pass *s, t_philo *p, unsigned long ms, unsigned long last)
 {
 	unsigned long	start;
 
 	start = militime();
 	while (militime() - start < ms)
 	{
-		if ((int)(militime() - last) >= s->info[DT])
-			return (kill_philo(s, pid));
+		if ((int)(militime() - last) >= p->dt)
+			return (kill_philo(s, p->id));
 		if (dead_philo(s))
 			return (False);
 		usleep(50);

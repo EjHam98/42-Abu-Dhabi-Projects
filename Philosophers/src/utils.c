@@ -6,7 +6,7 @@
 /*   By: ehammoud <ehammoud@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/06/12 14:48:29 by ehammoud          #+#    #+#             */
-/*   Updated: 2024/06/30 03:56:37 by ehammoud         ###   ########.fr       */
+/*   Updated: 2024/07/07 15:29:04 by ehammoud         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -41,12 +41,15 @@ unsigned long	militime(void)
 	return (tv.tv_sec * 1000 + tv.tv_usec / 1000);
 }
 
-int	left_index(int pid, int n)
+int	get_fork(int pid, int n, int fork)
 {
 	int		left;
 
 	left = pid - 1;
 	if (pid == 0)
 		left = n - 1;
-	return (left);
+	if ((pid % 2 == 0 && fork == 1) || (pid % 2 == 1 && fork == 2))
+		return (pid);
+	else
+		return (left);
 }
