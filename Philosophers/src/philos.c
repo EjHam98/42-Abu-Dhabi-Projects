@@ -6,7 +6,7 @@
 /*   By: ehammoud <ehammoud@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/06/12 19:08:05 by ehammoud          #+#    #+#             */
-/*   Updated: 2024/06/30 14:26:19 by ehammoud         ###   ########.fr       */
+/*   Updated: 2024/07/14 20:34:35 by ehammoud         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -91,8 +91,8 @@ void	handle_philos(int *info)
 		free_and_exit(&shared, philos, ERR_MEM, EXIT_FAILURE);
 	ret = run_threads(philos, &shared, routine);
 	i = 0;
-	while (i++ < info[NP])
-		pthread_mutex_destroy(&shared.m_forks[i]);
+	while (i < info[NP])
+		pthread_mutex_destroy(&shared.m_forks[i++]);
 	pthread_mutex_destroy(&shared.m_info);
 	pthread_mutex_destroy(&shared.m_tid);
 	pthread_mutex_destroy(&shared.m_fed);

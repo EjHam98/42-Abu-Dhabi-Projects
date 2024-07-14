@@ -39,7 +39,7 @@ CC = cc
 CFLAGS = -Wall -Wextra -Werror -pthread -I./inc/
 # CFLAGS += -fsanitize=address,undefined -g3
 CFLAGS += -fsanitize=thread
-NAME = philos
+NAME = philo
 SRCS = ./src/main.c ./src/philos.c ./src/philo_acts.c ./src/philo_utils.c ./src/utils.c
 OBJS = $(SRCS:.c=.o)
 

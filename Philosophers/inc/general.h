@@ -6,14 +6,14 @@
 /*   By: ehammoud <ehammoud@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/03/01 12:43:36 by ehammoud          #+#    #+#             */
-/*   Updated: 2024/06/12 19:46:10 by ehammoud         ###   ########.fr       */
+/*   Updated: 2024/07/14 20:36:43 by ehammoud         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #ifndef GENERAL_H
 # define GENERAL_H
 
-# define BLACK(str)   "\e[0;30m"str"\x1b[0m" // Black - Regular
+# define BLACK   "\e[0;30m" // Black - Regular
 # define RED     "\e[0;31m" // Red
 # define GREEN   "\e[0;32m" // Green
 # define YELLOW  "\e[0;33m" // Yellow

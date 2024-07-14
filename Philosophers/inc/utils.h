@@ -6,7 +6,7 @@
 /*   By: ehammoud <ehammoud@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/06/12 14:48:43 by ehammoud          #+#    #+#             */
-/*   Updated: 2024/07/07 15:34:21 by ehammoud         ###   ########.fr       */
+/*   Updated: 2024/07/14 20:36:15 by ehammoud         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -25,8 +25,8 @@
 # include <unistd.h>
 
 unsigned long	militime(void);
-int		ft_atoi(char *str);
-void	*ft_malloc(void **p, int elems, int size);
-int		get_fork(int pid, int n, int fork);
+int				ft_atoi(char *str);
+void			*ft_malloc(void **p, int elems, int size);
+int				get_fork(int pid, int n, int fork);
 
 #endif

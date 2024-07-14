@@ -6,7 +6,7 @@
 /*   By: ehammoud <ehammoud@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/06/23 16:40:33 by ehammoud          #+#    #+#             */
-/*   Updated: 2024/07/08 12:42:22 by ehammoud         ###   ########.fr       */
+/*   Updated: 2024/07/14 20:35:30 by ehammoud         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -38,8 +38,9 @@ int	fork_available(t_pass *s, t_philo *p)
 	pthread_mutex_lock(&(s->m_forks[get_fork(p->id, s->info[NP], 1)]));
 	pthread_mutex_lock(&(s->m_forks[get_fork(p->id, s->info[NP], 2)]));
 	pthread_mutex_lock(&(s->m_fed));
-	skip = (s->fed < p->np / 2 && (s->forks[get_fork(p->id, p->np, 1)] != AVAILABLE
-			|| s->forks[get_fork(p->id, p->np, 2)] != AVAILABLE));
+	skip = (s->fed < p->np / 2
+			&& (s->forks[get_fork(p->id, p->np, 1)] != AVAILABLE
+				|| s->forks[get_fork(p->id, p->np, 2)] != AVAILABLE));
 	pthread_mutex_unlock(&(s->m_fed));
 	if (s->forks[get_fork(p->id, p->np, 1)] == AVAILABLE && !skip)
 	{
@@ -63,7 +64,7 @@ t_bool	wait_for_fork(t_pass *s, t_philo *p)
 	pthread_mutex_lock(&(s->m_forks[get_fork(p->id, s->info[NP], 1)]));
 	pthread_mutex_lock(&(s->m_forks[get_fork(p->id, s->info[NP], 2)]));
 	fork = -1 * (s->forks[get_fork(p->id, p->np, 1)] == p->id
-		&& s->forks[get_fork(p->id, p->np, 2)] == p->id);
+			&& s->forks[get_fork(p->id, p->np, 2)] == p->id);
 	pthread_mutex_unlock(&(s->m_forks[get_fork(p->id, s->info[NP], 2)]));
 	pthread_mutex_unlock(&(s->m_forks[get_fork(p->id, s->info[NP], 1)]));
 	if (fork == -1)
